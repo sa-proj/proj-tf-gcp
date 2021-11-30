@@ -8,5 +8,5 @@ resource "google_spanner_database" "database" {
     "CREATE TABLE t1 (t1 INT64 NOT NULL,) PRIMARY KEY(t1)",
     "CREATE TABLE t2 (t2 INT64 NOT NULL,) PRIMARY KEY(t2)",
   ]
-  deletion_protection = true
+  deletion_protection = var.deletion_protection
 }

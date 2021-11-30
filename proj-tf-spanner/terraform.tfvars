@@ -6,3 +6,4 @@ spanner_num_nodes      = 2
 # spanner_processing_units = 1000
 spanner_labels      = { env = "development", owner = "arora"}
 gcp_project_id  = "YOUR_PROJECT_ID"
+spanner_db_deletion_protection = true
