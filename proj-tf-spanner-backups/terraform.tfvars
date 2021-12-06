@@ -1,0 +1,6 @@
+gcp_project_id  = "qwiklabs-gcp-00-f6e9463f7671"
+spanner_instance_id = "spanner-1"
+spanner_database_id = "sample"
+location = "us-central"
+region = "us-central1"
+schedule = "0 * * * *"
