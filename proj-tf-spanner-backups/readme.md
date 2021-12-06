@@ -1,7 +1,7 @@
 <br />
 <p align="center">
   <h2 align="center">Automated Backups for Cloud Spanner</h2>
-  <img alt="Autoscaler" src="resources/spanner-backup-architecture.jpg">
+  <img alt="Autoscaler" src="proj-tf-spanner-backups/resources/spanner-backup-architecture.jpg">
 </p>
 
 ## Overview
