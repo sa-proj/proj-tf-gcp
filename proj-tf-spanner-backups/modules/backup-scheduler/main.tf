@@ -31,7 +31,7 @@ resource "google_pubsub_topic_iam_member" "backup_sa_pubsub_sub_iam" {
 resource "google_cloud_scheduler_job" "backup_job" {
   region      = var.region
   project     = var.gcp_project_id
-  name        = "backup-spanner-instance-schedule"
+  name        = "spanner-backup-job"
   description = "Backup job for main-instance"
   schedule    = var.schedule
   time_zone   = var.time_zone

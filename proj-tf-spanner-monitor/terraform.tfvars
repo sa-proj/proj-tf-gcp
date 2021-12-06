@@ -1,4 +1,4 @@
-gcp_project_id  = "qwiklabs-gcp-02-4596c64840b8"
+gcp_project_id  = "qwiklabs-gcp-01-a4db253ae073"
 notify_email0 = "sandeep16arora@gmail.com"
 notify_email1 = "hello@sandeep-arora.com"
 spanner_instance_id = "spanner-1"

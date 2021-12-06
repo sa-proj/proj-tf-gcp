@@ -89,34 +89,8 @@ resource "google_monitoring_alert_policy" "storage-used" {
   ]
 }
 
-resource "google_monitoring_alert_policy" "errors" {
-  display_name = "4 - Reliability - Cloud Spanner - Custom Error Count - [${upper(var.spanner_instance_id)}]"
-  combiner     = "OR"
-  conditions {
-    display_name = "Cloud Spanner - Custom Error Count - [COUNT]"
-    condition_threshold {
-      filter     = "metric.type=\"logging.googleapis.com/user/spanner_error_count\" AND resource.type=\"spanner_instance\""
-      duration   = "60s"
-      comparison = "COMPARISON_GT"
-      threshold_value = 1
-      aggregations {
-        alignment_period = "60s"
-        per_series_aligner = "ALIGN_COUNT"
-        cross_series_reducer = "REDUCE_COUNT"
-      }
-    }    
-  }
-  documentation {
-    content = "The Count of Errors on Spanner Instance - [${upper(var.spanner_instance_id)}] has breached it's threshold value of 1 Error(s). Navigate to https://console.cloud.google.com/logs/query;query=resource.type%3D%22spanner_instance%22%20resource.labels.instance_id%3D%22${var.spanner_instance_id}%22%0Aseverity%3D%2528EMERGENCY%20OR%20ALERT%20OR%20CRITICAL%20OR%20ERROR%20OR%20WARNING%2529;project=${var.gcp_project_id}&query=%0A for exact errors logged in the logs explorer."
-  }
-  notification_channels = [
-      "${local.email0_id}",
-      "${local.email1_id}",
-  ]
-}
-
 resource "google_monitoring_alert_policy" "ops-errors" {
-  display_name = "5 - Reliability - Cloud Spanner - API Request Errors - [${upper(var.spanner_instance_id)}]"
+  display_name = "4 - Reliability - Cloud Spanner - API Request Errors - [${upper(var.spanner_instance_id)}]"
   combiner     = "OR"
   conditions {
     display_name = "Cloud Spanner - API Request Errors - [RATE]"
@@ -134,6 +108,111 @@ resource "google_monitoring_alert_policy" "ops-errors" {
   }
   documentation {
     content = "The errors receieved for operations per second on Spanner Instance - [${upper(var.spanner_instance_id)}] has breached it's threshold."
+  }
+  notification_channels = [
+      "${local.email0_id}",
+      "${local.email1_id}",
+  ]
+}
+
+resource "google_monitoring_alert_policy" "errors" {
+  display_name = "5 - Reliability - Cloud Spanner - Custom Error Count - [${upper(var.spanner_instance_id)}]"
+  combiner     = "OR"
+  conditions {
+    display_name = "Cloud Spanner - Custom Error Count - [COUNT]"
+    condition_threshold {
+      filter     = "metric.type=\"logging.googleapis.com/user/spanner-error-count\" AND resource.type=\"spanner_instance\""
+      duration   = "60s"
+      comparison = "COMPARISON_GT"
+      threshold_value = 0
+      aggregations {
+        alignment_period = "60s"
+        per_series_aligner = "ALIGN_COUNT"
+        cross_series_reducer = "REDUCE_SUM"
+      }
+    }    
+  }
+  documentation {
+    content = "The Count of Errors on Spanner Instance - [${upper(var.spanner_instance_id)}] has breached it's threshold value of 1 Error(s). Navigate to https://console.cloud.google.com/logs/query;query=resource.type%3D%22spanner_instance%22%20resource.labels.instance_id%3D%22${var.spanner_instance_id}%22%0Aseverity%3D%2528EMERGENCY%20OR%20ALERT%20OR%20CRITICAL%20OR%20ERROR%20OR%20WARNING%2529;project=${var.gcp_project_id}&query=%0A for exact errors logged in the logs explorer."
+  }
+  notification_channels = [
+      "${local.email0_id}",
+      "${local.email1_id}",
+  ]
+}
+
+
+resource "google_monitoring_alert_policy" "backup-job-errors" {
+  display_name = "6 - Reliability - Cloud Spanner - Custom Backup Job Failed - [${upper(var.spanner_instance_id)}]"
+  combiner     = "OR"
+  conditions {
+    display_name = "Cloud Spanner - Custom Backup Job Failed - [SUM]"
+    condition_threshold {
+      filter     = "metric.type=\"logging.googleapis.com/user/backup-cloud-function-errors\" AND resource.type=\"cloud_function\""
+      duration   = "60s"
+      comparison = "COMPARISON_GT"
+      threshold_value = 0
+      aggregations {
+        alignment_period = "60s"
+        per_series_aligner = "ALIGN_COUNT"
+        cross_series_reducer = "REDUCE_SUM"
+      }
+    }    
+  }
+  documentation {
+    content = "The Backup Job - [SpannerCreateBackup] for Spanner Instance - [${upper(var.spanner_instance_id)}] has failed."
+  }
+  notification_channels = [
+      "${local.email0_id}",
+      "${local.email1_id}",
+  ]
+}
+
+resource "google_monitoring_alert_policy" "backup-schedule-errors" {
+  display_name = "7 - Reliability - Cloud Spanner - Custom Backup Scheduler Failed - [${upper(var.spanner_instance_id)}]"
+  combiner     = "OR"
+  conditions {
+    display_name = "Cloud Spanner - Custom Backup Scheduler Failed - [SUM]"
+    condition_threshold {
+      filter     = "metric.type=\"logging.googleapis.com/user/backup-cloud-scheduler-errors\" AND resource.type=\"cloud_scheduler_job\""
+      duration   = "0s"
+      comparison = "COMPARISON_GT"
+      threshold_value = 0
+      aggregations {
+        alignment_period = "60s"
+        per_series_aligner = "ALIGN_COUNT"
+        cross_series_reducer = "REDUCE_SUM"
+      }
+    }    
+  }
+  documentation {
+    content = "The Backup Job - [SpannerCreateBackup] for Spanner Instance - [${upper(var.spanner_instance_id)}] has failed."
+  }
+  notification_channels = [
+      "${local.email0_id}",
+      "${local.email1_id}",
+  ]
+}
+
+resource "google_monitoring_alert_policy" "backup-spanner-errors" {
+  display_name = "8 - Reliability - Cloud Spanner - Spanner Backup Errors - [${upper(var.spanner_instance_id)}]"
+  combiner     = "OR"
+  conditions {
+    display_name = "Cloud Spanner - Spanner Backup Errors - [SUM]"
+    condition_threshold {
+      filter     = "metric.type=\"logging.googleapis.com/user/backup-cloud-spanner-errors\" AND resource.type=\"spanner_instance\""
+      duration   = "0s"
+      comparison = "COMPARISON_GT"
+      threshold_value = 0
+      aggregations {
+        alignment_period = "60s"
+        per_series_aligner = "ALIGN_COUNT"
+        cross_series_reducer = "REDUCE_SUM"
+      }
+    }    
+  }
+  documentation {
+    content = "The Backup Job - [SpannerCreateBackup] for Spanner Instance - [${upper(var.spanner_instance_id)}] has failed."
   }
   notification_channels = [
       "${local.email0_id}",
