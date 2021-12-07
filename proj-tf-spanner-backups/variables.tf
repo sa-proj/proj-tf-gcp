@@ -11,9 +11,6 @@ variable "spanner_instance_id" {
 variable "spanner_database_id" {
   type = string
 }
-variable "location" {
-  type    = string
-}
 variable "region" {
   type = string
 }
