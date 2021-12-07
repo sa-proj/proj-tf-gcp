@@ -34,7 +34,3 @@ variable "local_output_path" {
   type    = string
   default = "build"
 }
-
-variable "location" {
-  type    = string
-}
