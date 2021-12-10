@@ -141,7 +141,8 @@ resource "google_monitoring_alert_policy" "errors" {
   ]
 }
 
-
+//ALerts for Backup Scheduler and Cloud function for spanner backups. Only Use this section in case you have a backup automation for spanner created
+/*
 resource "google_monitoring_alert_policy" "backup-job-errors" {
   display_name = "6 - Reliability - Cloud Spanner - Custom Backup Job Failed - [${upper(var.spanner_instance_id)}]"
   combiner     = "OR"
@@ -194,6 +195,7 @@ resource "google_monitoring_alert_policy" "backup-schedule-errors" {
   ]
 }
 
+
 resource "google_monitoring_alert_policy" "backup-spanner-errors" {
   display_name = "8 - Reliability - Cloud Spanner - Spanner Backup Errors - [${upper(var.spanner_instance_id)}]"
   combiner     = "OR"
@@ -219,3 +221,4 @@ resource "google_monitoring_alert_policy" "backup-spanner-errors" {
       "${local.email1_id}",
   ]
 }
+*/

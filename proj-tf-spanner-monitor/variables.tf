@@ -18,3 +18,12 @@ variable "spanner_storage_threshold" {
   type = number
   # In GB
 }
+variable "bq_dataset_name" {
+  type = string
+}
+variable "pubsub_topic" {
+  type    = string
+}
+variable "region" {
+  type = string
+}

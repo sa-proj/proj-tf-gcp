@@ -8,6 +8,8 @@ resource "google_logging_metric" "spanner_log_metrics" {
   }
 }
 
+//Log Metrics for Backup Scheduler and Cloud function for spanner backups. Only Use this section in case you have a backup automation for spanner created
+/*
 resource "google_logging_metric" "spanner_backup_scheduler_log_metrics" {
   project = var.gcp_project_id
   name = "backup-cloud-scheduler-errors"
@@ -28,6 +30,7 @@ resource "google_logging_metric" "spanner_backup_function_log_metrics" {
   }
 }
 
+
 resource "google_logging_metric" "spanner_backup_log_metrics" {
   project = var.gcp_project_id
   name = "backup-cloud-spanner-errors"
@@ -37,3 +40,4 @@ resource "google_logging_metric" "spanner_backup_log_metrics" {
     value_type  = "INT64"
   }
 }
+*/

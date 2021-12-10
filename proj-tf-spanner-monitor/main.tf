@@ -14,3 +14,21 @@ module "alert-policies" {
   gcp_project_id = var.gcp_project_id
   storage_threshold = var.spanner_storage_threshold
 } 
+
+module "log-router" {
+  source = "./modules/log-router"
+  
+  spanner_instance_id   = var.spanner_instance_id
+  gcp_project_id = var.gcp_project_id
+  bq_dataset_name = var.bq_dataset_name
+} 
+
+module "metric-exporter" {
+  source = "./modules/metric-exporter"
+  
+  spanner_instance_id   = var.spanner_instance_id
+  gcp_project_id = var.gcp_project_id
+  bq_dataset_name = var.bq_dataset_name
+  region = var.region
+  pubsub_topic = var.pubsub_topic
+} 
