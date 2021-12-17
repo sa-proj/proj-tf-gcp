@@ -15,32 +15,39 @@ resource "google_project_iam_member" "backup_sa_spanner_iam" {
 // PubSub
 
 resource "google_pubsub_topic" "backup_topic" {
+  for_each = var.database_ids
   project = var.gcp_project_id
-  name = var.pubsub_topic
+  name = "${each.value}-${var.pubsub_topic}"
 }
 
 resource "google_pubsub_topic_iam_member" "backup_sa_pubsub_sub_iam" {
+  for_each = var.database_ids
   project = var.gcp_project_id
-  topic   = google_pubsub_topic.backup_topic.name
+  topic   = "${each.value}-${var.pubsub_topic}"
   role    = "roles/pubsub.subscriber"
   member  = "serviceAccount:${google_service_account.backup_sa.email}"
 }
 
 //Scheduler
 
+resource "google_app_engine_application" "app" {
+  project     = var.gcp_project_id
+  location_id = var.location
+}
+
 resource "google_cloud_scheduler_job" "backup_job" {
+  for_each    = var.database_ids
   region      = var.region
   project     = var.gcp_project_id
-  name        = "spanner-backup-job"
-  description = "Backup job for main-instance"
+  name        = "${each.value}-spanner-backup-job"
+  description = "Backup job for database - ${each.value}"
   schedule    = var.schedule
   time_zone   = var.time_zone
-
   pubsub_target {
-    topic_name = google_pubsub_topic.backup_topic.id
-    data       = var.pubsub_data
+    topic_name = google_pubsub_topic.backup_topic[each.value].id
+    data       = base64encode("{\"Database\":\"projects/${var.gcp_project_id}/instances/${var.spanner_instance_id}/databases/${each.value}\", \"Expire\": \"6h\"}")
   }
-  depends_on = [google_pubsub_topic.backup_topic]
+  depends_on = [google_app_engine_application.app]
 }
 
 
@@ -67,15 +74,16 @@ resource "google_storage_bucket_object" "gcs_functions_backup_source" {
 }
 
 resource "google_cloudfunctions_function" "spanner_backup_function" {
-  name = "SpannerCreateBackup"
-  project = var.gcp_project_id
-  region = var.region
+  for_each    = var.database_ids
+  name        = "${each.value}-SpannerCreateBackup"
+  project     = var.gcp_project_id
+  region      = var.region
   available_memory_mb = "256"
   entry_point = "SpannerCreateBackup"
-  runtime = "go113"
+  runtime     = "go113"
   event_trigger {
     event_type = "google.pubsub.topic.publish"
-    resource   = google_pubsub_topic.backup_topic.id
+    resource   = google_pubsub_topic.backup_topic[each.value].id
   }
   source_archive_bucket = google_storage_bucket.bucket_gcf_source.name
   source_archive_object = google_storage_bucket_object.gcs_functions_backup_source.name

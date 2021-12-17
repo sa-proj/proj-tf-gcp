@@ -8,18 +8,21 @@ variable "creds_file" {
 variable "spanner_instance_id" {
   type = string
 }
-variable "spanner_database_id" {
-  type = string
+variable "spanner_database_ids" {
+  type = set(string)
 }
 variable "region" {
   type = string
 }
 variable "backups_topic_name" {
   type = string
-  default = "cloud-spanner-scheduled-backups"
+  default = "spanner-scheduled-backup-topic"
 }
 variable "schedule" {
   type    = string
   default = "0 * * * *"
   //Every Hour
+}
+variable "location" {
+  type    = string
 }

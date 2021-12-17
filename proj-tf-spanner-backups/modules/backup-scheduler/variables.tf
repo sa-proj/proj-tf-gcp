@@ -26,11 +26,19 @@ variable "pubsub_topic" {
   type    = string
 }
 
-variable "pubsub_data" {
-  type    = string
-}
-
 variable "local_output_path" {
   type    = string
   default = "build"
+}
+
+variable "database_ids" {
+  type = set(string)
+}
+
+variable "spanner_instance_id" {
+  type = string
+}
+
+variable "location" {
+  type    = string
 }
