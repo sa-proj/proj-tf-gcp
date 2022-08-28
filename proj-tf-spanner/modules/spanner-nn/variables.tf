@@ -6,5 +6,5 @@ variable "spanner_dbname" {}
 variable "spanner_num_nodes" {}
 variable "deletion_protection"{
     type    = bool
-    default = true
+    default = false
 }
