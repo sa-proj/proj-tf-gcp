@@ -85,6 +85,7 @@ resource "google_cloudfunctions_function" "spanner_backup_function" {
     event_type = "google.pubsub.topic.publish"
     resource   = google_pubsub_topic.backup_topic[each.value].id
   }
+  max_instances = 1
   source_archive_bucket = google_storage_bucket.bucket_gcf_source.name
   source_archive_object = google_storage_bucket_object.gcs_functions_backup_source.name
   service_account_email = google_service_account.backup_sa.email
